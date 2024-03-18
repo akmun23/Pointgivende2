@@ -3,9 +3,7 @@
 #include "qsqlquery.h"
 
 class Task{
-
     QSqlQuery query;
-
 public:
     Task();
     void getTask();

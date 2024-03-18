@@ -40,5 +40,4 @@ void Task::addTask() {
 
     std::cout << "Task added" << std::endl;
     std::cout << std::endl;
-
 }

@@ -1,3 +1,4 @@
+#include "robot.h"
 #include "task.h"
 #include <QCoreApplication>
 #include <QtSql>
@@ -18,9 +19,12 @@ int main(int argc, char *argv[])
     db.open();
 
     Task task;
+    Robot robot;
 
     task.getTask();
     task.addTask();
+    task.getTask();
+    robot.doTask();
     task.getTask();
 
     return 1;

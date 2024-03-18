@@ -30,7 +30,9 @@ project(
 find_package(Qt5Sql REQUIRED)
 
 add_executable(MainRobot main_robot.cpp
-    task.h task.cpp)
+    task.h task.cpp
+    robot.h robot.cpp)
+
 target_link_libraries(MainRobot  Qt5::Core Qt5::Sql)
 
 # Make sure you link your targets with this command. It can also link libraries and
