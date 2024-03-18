@@ -10,7 +10,7 @@ Exercise 2:
 * Lav cpp kode "task.cpp" der udskriver alle opgaver
 
 Exercise 3:
-* Modificer koden til at kunne tilføje en opgave opgave til databasen fra kommando linjen.
+* Modificer koden til at kunne tilføje en opgave til databasen fra kommando linjen.
 
 Exercise 4:
 * Lav en ny fil "robot.cpp" der kan udføre en opgave og fjerner den fra opgave listen.

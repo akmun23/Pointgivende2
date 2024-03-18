@@ -2,6 +2,7 @@
 #include "qdebug.h"
 #include "qsqldatabase.h"
 #include "qsqlquery.h"
+#include "qsqlrecord.h"
 #include <iostream>
 
 Task::Task() {
@@ -22,6 +23,9 @@ void Task::addTask() {
     std::string task;
     int time;
 
+    query.exec("SELECT * FROM task");
+    int task_id = query.size();
+
     std::cout << "Enter task: ";
     std::cin >> task;
     std::cout << "Enter time: ";
@@ -29,15 +33,10 @@ void Task::addTask() {
 
     query.prepare("INSERT INTO task (task_id, description, time)"
                   "VALUES (:task_id, :description, :time)");
-    query.bindValue(":task_id", 4);
+    query.bindValue(":task_id", task_id + 1);
     query.bindValue(":description", QString::fromStdString(task));
     query.bindValue(":time", time);
     query.exec();
-
-    query.exec("SELECT description FROM task");
-    while (query.next()) {
-        qDebug() << query.value(0).toString();
-    }
 
     std::cout << "Task added" << std::endl;
     std::cout << std::endl;
