@@ -5,7 +5,23 @@
 #include "qsqlrecord.h"
 #include <iostream>
 
-Robot::Robot() {}
+Robot::Robot(std::string name, std::string taskName):_name(name), _taskName(taskName) {
+    query.exec("SELECT * from robots");
+    int id = query.size()+1;
+    query.prepare("INSERT INTO robots (robot_id, name, current_task)"
+                  "VALUES (:id, :name, :taskName)");
+    query.bindValue(":id", id);
+    query.bindValue(":name", QString::fromStdString(_name));
+    query.bindValue(":taskName", QString::fromStdString(_taskName));
+    query.exec();
+}
+
+Robot::~Robot() {
+    query.exec("SELECT * from robots");
+    query.prepare("DELETE FROM robots WHERE current_task = :taskName");
+    query.bindValue(":taskName", QString::fromStdString(_taskName));
+    query.exec();
+}
 
 void Robot::doTask(){
     //Removes task that has been done from the database
@@ -32,7 +48,7 @@ void Robot::doTask(){
 
     //Decreases the task_id for all tasks with higher number than the removed task
     if(id < size){
-        query.prepare("SELECT task_id FROM task WHERE task_id > :id");
+        query.prepare(" SELECT task_id FROM task WHERE task_id > :id");
         query.bindValue(":id", id);
         query.exec();
         int size = query.size();
@@ -43,7 +59,6 @@ void Robot::doTask(){
             query.bindValue(":task_id", id+1);
             query.exec();
             id += 1;
-
         }
     }
 }

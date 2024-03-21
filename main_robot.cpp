@@ -19,12 +19,16 @@ int main(int argc, char *argv[])
     db.open();
 
     Task task;
-    Robot robot;
+    Robot robot("R2D2", "Get garbage");
 
     task.getTask();
+
     task.addTask();
+
     task.getTask();
+
     robot.doTask();
+
     task.getTask();
 
     return 1;
