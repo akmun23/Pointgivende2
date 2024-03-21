@@ -27,7 +27,8 @@ void Task::addTask() {
     int task_id = query.size();
 
     std::cout << "Enter task: ";
-    std::cin >> task;
+    std::cin.ignore();
+    std::getline(std::cin, task);
     std::cout << "Enter time: ";
     std::cin >> time;
 

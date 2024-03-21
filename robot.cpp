@@ -11,7 +11,10 @@ Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
     while(1){
         int task_check;
         bool check = false;
+        bool real = false;
         query.exec("SELECT * from robots");
+
+        // Checks if the task is already being done
         while (query.next()) {
             task_check = query.value(2).toInt();
             if(task_check == _taskID){
@@ -20,6 +23,24 @@ Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
                 std::cout << "Please enter a task that is not being done: " << std::endl;
                 std::string taskName;
                 std::getline(std::cin, taskName);
+                bool real = false;
+
+                while(!real){
+                    // Checks if the task is in the database
+                    query.prepare("SELECT description FROM task WHERE description = :description");
+                    query.bindValue(":description", QString::fromStdString(taskName));
+                    query.exec();
+                    if(query.size() == 0){
+                        std::cout << "Task not found" << std::endl;
+                        real = false;
+                        std::cout << "Please enter a task that is not being done: " << std::endl;
+                        std::getline(std::cin, taskName);
+                    } else {
+                        real = true;
+                    }
+                }
+
+                // Gets the task_id for the task
                 query.prepare("SELECT task_id FROM task WHERE description = :description");
                 query.bindValue(":description", QString::fromStdString(taskName));
                 query.exec();
@@ -45,38 +66,43 @@ Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
     query.exec();
 }
 
+//Removes robot from the database
 Robot::~Robot() {
-    //Removes robot from the database
     query.prepare("DELETE FROM robots WHERE current_task = :taskID");
     query.bindValue(":taskID", (_taskID));
     query.exec();
 }
 
 void Robot::doTask(){
-    //Removes task that has been done from the database
-    std::string taskDone;
-    std::cout << "Enter task done: ";
-    std::cin >> taskDone;
-    std::cout << std::endl;
     int id;
+    // Loops until a task that is being done is entered
+    while(1){
+        bool check = false;
+        std::string taskDone;
+        std::cout << "Enter task done: " << std::endl;
+        std::getline(std::cin, taskDone);
+        std::cout << std::endl;
 
-    // Show the task_id that matches description
-    query.prepare("SELECT task_id FROM task WHERE description = :description");
-    query.bindValue(":description", QString::fromStdString(taskDone));
-    query.exec();
+        // Selects the task_id for the task done
+        query.prepare("SELECT task_id FROM task WHERE description = :description");
+        query.bindValue(":description", QString::fromStdString(taskDone));
+        query.exec();
 
-    while (query.next()) {
-        id = query.value(0).toInt();
-    }
+        while (query.next()) {
+            id = query.value(0).toInt();
+        }
 
-    // Check if the task is being done
-    query.prepare("SELECT current_task FROM robots WHERE current_task = :task_id");
-    query.bindValue(":task_id", id);
-    query.exec();
-    if(query.size() == 0){
-        std::cout << "Task not being done" << std::endl;
-        std::cout << "Please enter a task that is being done" << std::endl;
-        return;
+        // Check if the task is being done
+        query.prepare("SELECT current_task FROM robots WHERE current_task = :task_id");
+        query.bindValue(":task_id", id);
+        query.exec();
+        if(query.size() == 0){
+            std::cout << "Task not being done" << std::endl;
+            check = true;
+        }
+        if(check == false){
+            break;
+        }
     }
 
     // Remove the task from the robot doing the task
