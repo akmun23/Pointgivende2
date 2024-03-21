@@ -5,9 +5,9 @@
 class Robot{
     QSqlQuery query;
     std::string _name;
-    std::string _taskName;
+    int _taskID;
 public:
-    Robot(std::string name, std::string taskName);
+    Robot(std::string name, int taskID);
     ~Robot();
     void doTask();
 };

@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     db.open();
 
     Task task;
-    Robot robot("R2D2", "Get garbage");
+    Robot robot("R2D2", 4);
 
     task.getTask();
 

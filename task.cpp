@@ -33,7 +33,7 @@ void Task::addTask() {
 
     query.prepare("INSERT INTO task (task_id, description, time)"
                   "VALUES (:task_id, :description, :time)");
-    query.bindValue(":task_id", task_id + 1);
+    query.bindValue(":task_id", task_id+1);
     query.bindValue(":description", QString::fromStdString(task));
     query.bindValue(":time", time);
     query.exec();
