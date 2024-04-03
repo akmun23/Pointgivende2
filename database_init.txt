@@ -23,6 +23,3 @@ VALUES ("Clean stairs", 30);
 
 INSERT INTO task (description, time)
 VALUES ("Debug the code", 20);
-
-
-

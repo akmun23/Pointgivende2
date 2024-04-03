@@ -5,9 +5,72 @@
 #include "qsqlrecord.h"
 #include <iostream>
 
-Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
+Robot::Robot(){}
 
+Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
     //Checks if task is already being done
+    while(1){
+        int task_check;
+        bool check = false;
+        bool real = false;
+        query.exec("SELECT * from robots");
+
+        // Checks if the task is already being done
+        while (query.next()) {
+            task_check = query.value(2).toInt();
+            if(task_check == _taskID){
+                std::cout << name << "'s task is already being done" << std::endl;
+                task.getTask();
+                std::cout << "Please enter a task that is not being done: " << std::endl;
+                std::string taskName;
+                std::getline(std::cin, taskName);
+                bool real = false;
+
+                while(!real){
+                    // Checks if the task is in the database
+                    query.prepare("SELECT description FROM task WHERE description = :description");
+                    query.bindValue(":description", QString::fromStdString(taskName));
+                    query.exec();
+                    if(query.size() == 0){
+                        std::cout << "Task not found" << std::endl;
+                        real = false;
+                        std::cout << "Please enter a task that is not being done: " << std::endl;
+                        std::getline(std::cin, taskName);
+                    } else {
+                        real = true;
+                    }
+                }
+
+                // Gets the task_id for the task
+                query.prepare("SELECT task_id FROM task WHERE description = :description");
+                query.bindValue(":description", QString::fromStdString(taskName));
+                query.exec();
+                while (query.next()) {
+                    _taskID = query.value(0).toInt();
+                    check = true;
+                }
+            }
+        }
+        if(check == false){
+            break;
+        }
+    }
+
+    //Adds robot to the database
+    query.exec("SELECT * FROM robots");
+    int id = query.size()+1;
+    query.prepare("INSERT INTO robots (robot_id, name, current_task)"
+                  "VALUES (:id, :name, :taskName)");
+    query.bindValue(":id", id);
+    query.bindValue(":name", QString::fromStdString(_name));
+    query.bindValue(":taskName", _taskID);
+    query.exec();
+}
+
+void Robot::init(std::string name, int taskID){
+    //Checks if task is already being done
+    _name = name;
+    _taskID = taskID;
     while(1){
         int task_check;
         bool check = false;
@@ -69,7 +132,7 @@ Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
 //Removes robot from the database
 Robot::~Robot() {
     query.prepare("DELETE FROM robots WHERE current_task = :taskID");
-    query.bindValue(":taskID", (_taskID));
+    query.bindValue(":taskID", _taskID);
     query.exec();
 }
 

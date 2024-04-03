@@ -9,7 +9,9 @@ class Robot{
     int _taskID;
     Task task;
 public:
+    Robot();
     Robot(std::string name, int taskID);
+    void init(std::string name, int taskID);
     ~Robot();
     void doTask();
 };
