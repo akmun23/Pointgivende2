@@ -5,8 +5,10 @@
 #include "qsqlrecord.h"
 #include <iostream>
 
+// Empty constructor
 Robot::Robot(){}
 
+// Constructor for robot with name and task_id
 Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
     //Checks if task is already being done
     while(1){
@@ -67,6 +69,7 @@ Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
     query.exec();
 }
 
+// Initializes values for robot that has been constructed without any values
 void Robot::init(std::string name, int taskID){
     //Checks if task is already being done
     _name = name;
@@ -129,13 +132,14 @@ void Robot::init(std::string name, int taskID){
     query.exec();
 }
 
-//Removes robot from the database
+//Deconstructs robot from the database
 Robot::~Robot() {
     query.prepare("DELETE FROM robots WHERE current_task = :taskID");
     query.bindValue(":taskID", _taskID);
     query.exec();
 }
 
+// Makes the robot "do" the task removing the task from the robot and the database
 void Robot::doTask(){
     int id;
     // Loops until a task that is being done is entered

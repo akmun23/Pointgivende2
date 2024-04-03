@@ -14,21 +14,25 @@ int main(int argc, char *argv[])
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("localhost");
     db.setDatabaseName("robot_worker"); // Ret til det schema navn du har valgt
-    db.setUserName("aksel");  // Ret brugernavn
-    db.setPassword("password");  // Ret password
+    db.setUserName("Insert Username");  // Ret brugernavn
+    db.setPassword("Insert Password");  // Ret password
     db.open();
 
+    // Makes query object
     QSqlQuery query;
+
+    // Constructs 100 empty robots
     Robot robots[100];
     int number = 0;
     Task task;
 
-    std::string input;
-
+    // Welcome message
     std::cout << "Welcome to the robot worker" << std::endl;
     std::cout << "Commands: add, get, do, exit, new, set" << std::endl;
     std::cout << "Type help for commands" << "\n" << std::endl;
 
+    // Input variable
+    std::string input;
     int i = 0;
 
     // Main loop
@@ -47,6 +51,7 @@ int main(int argc, char *argv[])
         } else if(input == "do"){
             robots[0].doTask();
         } else if(input == "new"){
+            // Create new robot
             int id;
             std::cout << "Enter name of robot:";
             std::string name;
@@ -70,6 +75,7 @@ int main(int argc, char *argv[])
             number++;
 
         } else if(input == "set"){
+            // Set task for robot
             int id;
             bool exists = true;
             std::cout << "Enter name of robot:";
@@ -106,7 +112,9 @@ int main(int argc, char *argv[])
             query.bindValue(":id", id);
             query.bindValue(":name", QString::fromStdString(name));
             query.exec();
+
         } else if(input == "help"){
+            // Help message
             std::cout << "Commands: add, get, do, exit" << std::endl;
             std::cout << "Add: Add a task to the database" << std::endl;
             std::cout << "Get: Get list of all tasks from the database" << std::endl;
