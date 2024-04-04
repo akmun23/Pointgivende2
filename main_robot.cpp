@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("localhost");
     db.setDatabaseName("robot_worker"); // Ret til det schema navn du har valgt
-    db.setUserName("Insert Username");  // Ret brugernavn
-    db.setPassword("Insert Password");  // Ret password
+    db.setUserName("aksel");  // Ret brugernavn
+    db.setPassword("password");  // Ret password
     db.open();
 
     // Makes query object

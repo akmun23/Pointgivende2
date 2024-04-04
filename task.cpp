@@ -8,8 +8,8 @@
 Task::Task() {
 }
 
+// Prints tasks
 void Task::getTask() {
-    //Prints tasks
     qDebug() << "Tasks: ";
     query.exec("SELECT description FROM task");
     while (query.next()) {
@@ -18,6 +18,7 @@ void Task::getTask() {
     std::cout << std::endl;
 }
 
+// Adds a task
 void Task::addTask() {
     //Adds a task
     std::string task;

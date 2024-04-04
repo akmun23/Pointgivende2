@@ -142,6 +142,16 @@ Robot::~Robot() {
 // Makes the robot "do" the task removing the task from the robot and the database
 void Robot::doTask(){
     int id;
+
+    query.prepare("Select count(*) FROM robots WHERE current_task != 0");
+    query.exec();
+    while(query.next()){
+        if(query.value(0).toInt() == 0){
+            std::cout << "No task is being done" << std::endl;
+            return;
+        }
+    }
+
     // Loops until a task that is being done is entered
     while(1){
         bool check = false;
