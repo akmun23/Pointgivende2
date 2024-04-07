@@ -37,6 +37,7 @@ Robot::Robot(std::string name, int taskID):_name(name), _taskID(taskID) {
                         std::cout << "Task not found" << std::endl;
                         real = false;
                         std::cout << "Please enter a task that is not being done: " << std::endl;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         std::getline(std::cin, taskName);
                     } else {
                         real = true;
@@ -88,6 +89,7 @@ void Robot::init(std::string name, int taskID){
                 task.getTask();
                 std::cout << "Please enter a task that is not being done: " << std::endl;
                 std::string taskName;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::getline(std::cin, taskName);
                 bool real = false;
 
@@ -100,6 +102,7 @@ void Robot::init(std::string name, int taskID){
                         std::cout << "Task not found" << std::endl;
                         real = false;
                         std::cout << "Please enter a task that is not being done: " << std::endl;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         std::getline(std::cin, taskName);
                     } else {
                         real = true;
@@ -156,7 +159,8 @@ void Robot::doTask(){
     while(1){
         bool check = false;
         std::string taskDone;
-        std::cout << "Enter task done: " << std::endl;
+        std::cout << "Enter task done:" << std::endl;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::getline(std::cin, taskDone);
         std::cout << std::endl;
 
@@ -181,6 +185,8 @@ void Robot::doTask(){
             break;
         }
     }
+
+    std::cout << std::endl;
 
     // Remove the task from the robot doing the task
     query.prepare("UPDATE robots SET current_task = :new_id WHERE current_task = :task_id");

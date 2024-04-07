@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     // Main loop
     while(1){
         if(i > 0){
-            std::cout << "Enter next command or type help for commands" << "\n" << std::endl;
+            std::cout << "Enter next command or type help for commands" << std::endl;
         }
         std::cin >> input;
         input[0] = tolower(input[0]);
@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
             std::string name;
             std::cin.ignore();
             std::cout << std::endl;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::getline(std::cin, name);
             std::cout << "Enter the task to do:" << std::endl;
             std::string desc;
@@ -70,7 +71,9 @@ int main(int argc, char *argv[])
             if(id == 0){
                 std::cout << "Task does not exist" << std::endl;
                 std::cout << "Robot hasnt been assigned a task" << std::endl;
+                std::cout << "Use set command to assign a task to the robot" << std::endl;
             }
+            std::cout << "Robot created" << std::endl;
             robots[number].init(name, id);
             number++;
 
@@ -83,7 +86,7 @@ int main(int argc, char *argv[])
             std::cin.ignore();
             std::cout << std::endl;
             std::getline(std::cin, name);
-
+            std::cout << std::endl;
             query.prepare("SELECT count(*) FROM robots where name = :name");
             query.bindValue(":name", QString::fromStdString(name));
             if(query.exec()){
@@ -101,6 +104,7 @@ int main(int argc, char *argv[])
 
             std::cout << "Enter the task to do:" << std::endl;
             std::string desc;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::getline(std::cin, desc);
             query.prepare("SELECT * FROM task where description = :desc");
             query.bindValue(":desc", QString::fromStdString(desc));
@@ -112,6 +116,7 @@ int main(int argc, char *argv[])
             query.bindValue(":id", id);
             query.bindValue(":name", QString::fromStdString(name));
             query.exec();
+            std::cout << "Task set for robot" << std::endl;
 
         } else if(input == "help"){
             // Help message
